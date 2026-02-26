@@ -1,16 +1,31 @@
-# React + Vite
+# Social Media App 2026 🚀
 
-This template provides a minimal setup to get React working in Vite with HMR and some ESLint rules.
+A simple social media web application built with **React** (Frontend only for now).
 
-Currently, two official plugins are available:
+## Current Features Implemented
 
-- [@vitejs/plugin-react](https://github.com/vitejs/vite-plugin-react/blob/main/packages/plugin-react) uses [Babel](https://babeljs.io/) (or [oxc](https://oxc.rs) when used in [rolldown-vite](https://vite.dev/guide/rolldown)) for Fast Refresh
-- [@vitejs/plugin-react-swc](https://github.com/vitejs/vite-plugin-react/blob/main/packages/plugin-react-swc) uses [SWC](https://swc.rs/) for Fast Refresh
+### Authentication
+- User Registration (Sign Up)
+- User Login (Sign In)
+- Secure access (only logged-in users can create/edit/delete)
 
-## React Compiler
+### Posts
+- Create a new post
+- Edit your own post
+- Delete your own post
+- All posts appear in the Home Feed
+- All your posts appear on your own Profile page
 
-The React Compiler is not enabled on this template because of its impact on dev & build performances. To add it, see [this documentation](https://react.dev/learn/react-compiler/installation).
+### Comments
+- Add a comment to any post
+- Edit your own comment
+- Delete your own comment
 
-## Expanding the ESLint configuration
-
-If you are developing a production application, we recommend using TypeScript with type-aware lint rules enabled. Check out the [TS template](https://github.com/vitejs/vite/tree/main/packages/create-vite/template-react-ts) for information on how to integrate TypeScript and [`typescript-eslint`](https://typescript-eslint.io) in your project.
+## Technologies Used
+- Frontend: React + Vite
+- Routing: React Router v6
+- State Management: Context API
+- HTTP Requests: Axios
+- Notifications: React Toastify
+- Icons: react-icons
+- UI Components: HeroUI / Tailwind CSS (update this if needed)
