@@ -15,6 +15,7 @@ import PostDetails from './Components/PostDetails/PostDetails';
 import { ToastContainer } from 'react-toastify';
 import DetectOffline from './Components/DetectOffline/DetectOffline';
 import { useNetworkState } from 'react-use';
+import EditPost from './Components/EditPost/EditPost';
 
 
 
@@ -24,6 +25,7 @@ const router= createBrowserRouter([
 // { index: true, element: <ProtectedRoute> <Home/> </ProtectedRoute>},
 { path: "/", element: <ProtectedRoute> <Home/> </ProtectedRoute>},
 { path: "postDetails/:id", element: <ProtectedRoute><PostDetails/></ProtectedRoute>},
+{ path: "editPost/:id", element: <ProtectedRoute><EditPost/></ProtectedRoute>},
 { path: "login", element: <Login/>},
 { path: "profile", element: <ProtectedRoute><Profile/></ProtectedRoute>},
 { path: "register", element: <Register/>},

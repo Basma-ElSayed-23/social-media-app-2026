@@ -45,25 +45,44 @@ const form =  useForm({
 const {register, handleSubmit, setError, getValues, formState}  = form;
 // register('email');
 // console.log(formState)
+// axios.post(`https://route-posts.routemisr.com/users/signin`, values)
+// .then((res) => {
+// console.log(res.data.data.token);
+
+
+
+//   if (res.data.message === "signed in successfully"){
+//     localStorage.setItem("userToken", res.data.data.token);
+//     setUserLogin(res.data.data.token);
+//     // setUserLogin(res.data.data.token)
+//     navigate("/");
+//   }
+// })
+// .catch((err) => {
+//   setApiError(err.response?.data?.message|| "Wrong to login");
+
+// })
+// .finally(() => {
+// setLoading(false);
+// });
+// }
+
+
 
 function handleLogin(values){
 setLoading(true);
 
-          
 axios.post(`https://route-posts.routemisr.com/users/signin`, values)
 .then((res) => {
-console.log(res.data.data.token);
-
   if (res.data.message === "signed in successfully"){
     localStorage.setItem("userToken", res.data.data.token);
+    localStorage.setItem("userData", JSON.stringify(res.data.data.user));
     setUserLogin(res.data.data.token);
-    // setUserLogin(res.data.data.token)
-    navigate("/");
+   navigate("/");
   }
 })
 .catch((err) => {
   setApiError(err.response?.data?.message|| "Wrong to login");
-
 })
 .finally(() => {
 setLoading(false);

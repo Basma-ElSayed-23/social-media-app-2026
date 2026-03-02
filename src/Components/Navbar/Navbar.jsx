@@ -22,7 +22,7 @@ import { AuthContext } from './../../Context/AuthContext';
 
 export default function MyNavbar() {
   const [isMenuOpen, setIsMenuOpen] = useState(false);
-  const {userLogin, setUserLogin} = useContext(AuthContext);
+  const {userLogin, setUserLogin, userId} = useContext(AuthContext);
   const navigate =  useNavigate();
 
   
@@ -79,11 +79,14 @@ export default function MyNavbar() {
               as="button"
               className="transition-transform"
               color="secondary"
-              name="Jason Hughes"
+              name={userId?.name}
               size="sm"
-              //will change with login user logo
-              src="https://i.pravatar.cc/150?u=a042581f4e29026704d"
-            />
+              src={userId?.photo}
+              />
+              {/* //will change with login user logo
+              // src="https://i.pravatar.cc/150?u=a042581f4e29026704d" */}
+
+           
           </DropdownTrigger>
           <DropdownMenu aria-label="Profile Actions" variant="flat">
             

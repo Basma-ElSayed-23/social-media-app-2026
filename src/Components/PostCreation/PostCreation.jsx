@@ -7,18 +7,20 @@ import { Avatar,
   Button,
   useDisclosure,
  } from '@heroui/react'
-import React from 'react'
+import React, { useContext } from 'react'
 import { useState, useRef } from 'react';
 import { IoMdClose } from "react-icons/io";
 import { BsFileImage } from "react-icons/bs";
 import axios from 'axios';
 import { useMutation, useQueryClient } from '@tanstack/react-query';
 import { toast } from 'react-toastify';
+import { AuthContext } from './../../Context/AuthContext';
 
 
 export default function PostCreation() {
   const {isOpen, onOpen, onOpenChange} = useDisclosure();
   const [isUploaded, setisUploaded] = useState(false);
+  const {userId} = useContext(AuthContext);
 
   const query = useQueryClient()
 
@@ -75,7 +77,7 @@ const {data , isPending, mutate} = useMutation({
   return (
     <div className='max-w-125 mx-auto mb-6 bg-slate-100 p-2 rounded-sm'>
       <div className='flex gap-2'>
-        <Avatar isBordered size="md" src="https://i.pravatar.cc/150?u=a042581f4e29026704d" />
+        <Avatar isBordered size="md" src={userId?.photo} name={userId?.name}/>
         <input onClick={onOpen} type="text" className='w-full bg-slate-300 rounded-sm focus:outline-none' placeholder='Whats on your mind?' readOnly/>
       </div>
       <div className='modal'>

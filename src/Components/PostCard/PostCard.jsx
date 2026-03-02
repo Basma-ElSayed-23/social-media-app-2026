@@ -83,11 +83,13 @@ export default function PostCard({post, isPostDetails = false}) {
         
        {loggedUserId === userId && (<Dropdown>
       <DropdownTrigger>
-       <HiOutlineDotsHorizontal className="cursor-pointer" />
+        <Button isIconOnly variant="light">
+<HiOutlineDotsHorizontal className="cursor-pointer" />
+        </Button>
       </DropdownTrigger>
       <DropdownMenu aria-label="Static Actions">
        
-          <DropdownItem key="edit">
+          <DropdownItem key="edit" textValue="Edit Post" onPress={() => navigate(`/editPost/${id}`)}>
              <div className="flex items-center justify-between">
               Edit Post <FaRegEdit />
           </div>
