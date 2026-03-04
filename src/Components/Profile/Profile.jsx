@@ -13,8 +13,16 @@ export default function Profile() {
 const imageInput= useRef();
 // const queryClient = useQueryClient();
 const [preview, setPreview] = useState(null);
+const [photoUrl, setPhotoUrl] = useState(null);
+
+
+
+const [newName, setNewName] = useState("");
+
+
+
 const navigate= useNavigate();
-const {setUserId} = useContext(AuthContext);
+const {userId, updateUserData} = useContext(AuthContext);
 const queryClient = useQueryClient();
 
 
@@ -26,6 +34,27 @@ return axios.put("https://route-posts.routemisr.com/users/upload-photo", formDat
 }
 );
 }
+/**/ 
+function updateName() {
+  console.log({
+    name: newName,
+    email: userId.email,
+    password: "123456"
+  });
+  return axios.put(
+    "https://route-posts.routemisr.com/users/update-user",
+    {
+      name:newName,
+      email: userId.email,
+      password: "123456"
+    },
+    {   
+      headers: {
+        Authorization: `Bearer ${localStorage.getItem("userToken")}`,
+      },
+    }
+  );
+}
 
 const {mutate, isPending} = useMutation({
   mutationFn: uploadProfilePhoto,
@@ -35,9 +64,10 @@ const {mutate, isPending} = useMutation({
     // setuserId(res.data.data.user);
 
  const updatedUser = res.data.data.user;
+ updateUserData(updatedUser)
 
  localStorage.setItem("userData", JSON.stringify(updatedUser));
- setUserId(updatedUser);
+//  setUserId(updatedUser);
 
  queryClient.invalidateQueries({queryKey: ["getAllPost"]});
 
@@ -47,6 +77,21 @@ const {mutate, isPending} = useMutation({
   onError: (error) =>{
  console.log(error);
  toast.error("Upload failed ❌");
+  },
+});
+
+/**/ 
+const { mutate: updateUserName, isPending: isNamePending } = useMutation({
+  mutationFn: updateName,
+
+  onSuccess: (res) => {
+    const updatedUser = res.data.data.user;
+    updateUserData(updatedUser);
+    toast.success("Name updated ✅");
+  },
+
+  onError: () => {
+    toast.error("Failed ❌");
   },
 });
 
@@ -63,7 +108,7 @@ const formData= new FormData();
 formData.append("photo", file);
 
 mutate(formData);
-e.target.value = null;
+// e.target.value = null;
 }
 
 
@@ -73,17 +118,54 @@ e.target.value = null;
     <div className='flex flex-col items-center mt-10 gap-4'>
       <div className='w-32 h-32 overflow-hidden cursor-pointer border-4 border-gray-400 rounded-full' 
       onClick={() => imageInput.current.click()}>
-        <img src={preview || "https://avatars.githubusercontent.com/u/86160567?s=200&v=4"} alt="profile"
+       <img src={preview || photoUrl || "https://avatars.githubusercontent.com/u/86160567?s=200&v=4"} alt="profile"
         className='w-full object-cover h-full'/>
+        
       </div>
       <input type="file" ref={imageInput} className='hidden' onChange={handleImageChange}/>
 
       {isPending && <p>Uploading...</p>}
+
+      /**/ */
+
+      <div className="flex flex-col gap-2 mt-4 w-64">
+  <input
+    type="text"
+    value={newName}
+    onChange={(e) => setNewName(e.target.value)}
+    placeholder="Enter new name"
+    className="border p-2 rounded"
+  />
+
+  <button
+    onClick={() => updateUserName({ name: newName })}
+    className="bg-blue-500 text-white p-2 rounded"
+  >
+    Update Name
+  </button>
+
+  {isNamePending && <p>Updating...</p>}
+</div>
     </div>
     </>
     
   );
 }
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
 
 
 

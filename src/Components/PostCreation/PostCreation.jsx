@@ -20,7 +20,7 @@ import { AuthContext } from './../../Context/AuthContext';
 export default function PostCreation() {
   const {isOpen, onOpen, onOpenChange} = useDisclosure();
   const [isUploaded, setisUploaded] = useState(false);
-  const {userId} = useContext(AuthContext);
+  const {userId, profilePicRefresh} = useContext(AuthContext);
 
   const query = useQueryClient()
 
@@ -28,6 +28,8 @@ export default function PostCreation() {
   const imageInput = useRef(null);
 
 // const formData = new FormData()
+
+
 
 function prepareData(){
   const formData = new FormData();
@@ -77,7 +79,15 @@ const {data , isPending, mutate} = useMutation({
   return (
     <div className='max-w-125 mx-auto mb-6 bg-slate-100 p-2 rounded-sm'>
       <div className='flex gap-2'>
-        <Avatar isBordered size="md" src={userId?.photo} name={userId?.name}/>
+        <Avatar 
+        key={`postCreation-avatar-${userId?.photo || 'default'}-${profilePicRefresh}`}
+        isBordered size="md" 
+        src={
+    userId?.photo 
+      ? `${userId.photo}?v=${profilePicRefresh}` 
+      : undefined 
+  }
+/>
         <input onClick={onOpen} type="text" className='w-full bg-slate-300 rounded-sm focus:outline-none' placeholder='Whats on your mind?' readOnly/>
       </div>
       <div className='modal'>
@@ -86,7 +96,7 @@ const {data , isPending, mutate} = useMutation({
         <ModalContent>
           {(onClose) => (
             <>
-              <ModalHeader className="flex flex-col gap-1">Create Post</ModalHeader>
+              <ModalHeader className="flex flex-col gap-1 cursor-pointer">Create Post</ModalHeader>
               <ModalBody>
                 <textarea ref={textInput} className='w-full bg-slate-300 rounded-sm focus:outline-none p-5' placeholder='Whats on your mind?'></textarea>
                 {isUploaded &&  <div className='relative'>

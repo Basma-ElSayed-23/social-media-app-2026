@@ -22,7 +22,7 @@ import { AuthContext } from './../../Context/AuthContext';
 
 export default function MyNavbar() {
   const [isMenuOpen, setIsMenuOpen] = useState(false);
-  const {userLogin, setUserLogin, userId} = useContext(AuthContext);
+  const {userLogin, setUserLogin, userId, profilePicRefresh} = useContext(AuthContext);
   const navigate =  useNavigate();
 
   
@@ -75,13 +75,16 @@ export default function MyNavbar() {
         <Dropdown placement="bottom-end">
           <DropdownTrigger>
             <Avatar
+              key={`navbar-avatar-${userId?.photo || 'default'}-${profilePicRefresh}`}
               isBordered
               as="button"
               className="transition-transform"
               color="secondary"
               name={userId?.name}
               size="sm"
-              src={userId?.photo}
+              src={
+                userId?.photo
+                 ? `${userId.photo}?v=${profilePicRefresh}` : undefined}
               />
               {/* //will change with login user logo
               // src="https://i.pravatar.cc/150?u=a042581f4e29026704d" */}

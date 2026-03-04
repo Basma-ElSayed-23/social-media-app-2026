@@ -1,6 +1,6 @@
 import { createContext, useEffect, useState } from "react";
 import axios from "axios";
-// import {jwtDecode} from "jwt-decode"
+import {jwtDecode} from "jwt-decode"
 
 
 export const AuthContext =  createContext();
@@ -10,17 +10,23 @@ export default function AuthContextProvider({children}) {
     return localStorage.getItem("userToken");
    });
    const [userId , setUserId] = useState(()=>{
-    const data = localStorage.getItem("userData");
-    //**// */
-  return data && data !== "undefined" ? JSON.parse(data) : null;
+   const data = localStorage.getItem("userData");
+   return data && data !== "undefined" ? JSON.parse(data) : null;
    })
-  
 
-//    useEffect(() =>{
-//     if (localStorage.getItem("userToken")){
-//         setUserLogin(localStorage.getItem("userToken"))
-// }
-//    },  []);
+// const[profilePicRefresh, setprofilePicRefresh] = useState(0)
+
+  //**// */
+const updateUserData = (updatedUser) => {
+  setUserId(updatedUser);
+  localStorage.setItem("userData", JSON.stringify(updatedUser));
+};
+
+   useEffect(() =>{
+    if (localStorage.getItem("userToken")){
+        setUserLogin(localStorage.getItem("userToken"))
+}
+   },  []);
 
 
 //    useEffect(() => {
@@ -31,44 +37,58 @@ export default function AuthContextProvider({children}) {
 //    }, [userLogin])
 
 
+// useEffect(() => {
+//   if (userLogin && !localStorage.getItem("userData")){
+//     axios.get(`https://route-posts.routemisr.com/users/profile-data`, {
+//       headers: {
+//         Authorization: `Bearer ${userLogin}`,
+//       },
+//     })
+//     .then((res) => {
+//       setUserId(res.data.data.user);
+//       localStorage.setItem("userData", JSON.stringify(res.data.data.user))
+//     })
+//     .catch((err) => {
+//     console.log(err);
+//     });
+//   }
+// },[userLogin]);
+
+
+// useEffect(() => {
+//   if (userLogin) {
+//     axios.get(`https://route-posts.routemisr.com/users/profile-data`, {
+//       headers: {
+//         Authorization: `Bearer ${userLogin}`,
+//       },
+//     })
+//     .then((res) => {
+//       setUserId(res.data.data.user);
+//       localStorage.setItem("userData", JSON.stringify(res.data.data.user))
+//     })
+//   }
+// }, [userLogin]);
+
+
+
 useEffect(() => {
-  if (userLogin){
+  if (userLogin) {
     axios.get(`https://route-posts.routemisr.com/users/profile-data`, {
       headers: {
         Authorization: `Bearer ${userLogin}`,
       },
     })
     .then((res) => {
+       console.log("API response:", res.data);
       setUserId(res.data.data.user);
+      localStorage.setItem("userData", JSON.stringify(res.data.data.user))
     })
-    .catch((err) => {
-    console.log(err);
-    });
   }
-},[userLogin]);
-
-
-// useEffect(() => {
-//   if (userLogin) {
-//     axios
-//       .get("https://route-posts.routemisr.com/users/profile-data", {
-//         headers: {
-//           Authorization: `Bearer ${userLogin}`,
-//         },
-//       })
-//       .then((res) => {
-//         setuserId(res.data.data.user);
-//       })
-//       .catch((err) => {
-//         console.log(err);
-//       });
-//   }
-// }, [userLogin]);
+}, [userLogin]);
 
 
 
-
-    return  <AuthContext.Provider  value={{userLogin, setUserLogin, userId, setUserId}}>
+    return  <AuthContext.Provider  value={{userLogin, setUserLogin, userId, updateUserData}}>
         {children}
     </AuthContext.Provider>
 }

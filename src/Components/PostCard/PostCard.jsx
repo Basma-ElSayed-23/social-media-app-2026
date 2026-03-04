@@ -17,14 +17,15 @@ const PLACEHOLDER_IMAGE = "https://avatars.githubusercontent.com/u/86160567?s=20
 export default function PostCard({post, isPostDetails = false}) {
   const {body, image, createdAt, user, topComment, id}  = post;
   const {name, photo} = user;
+  const query = useQueryClient();
 
   
-  const {userId : loggedUserId} = useContext(AuthContext);
+  const {userId : loggedUser} = useContext(AuthContext);
   const navigate =  useNavigate()
 
   const myTopComment = topComment;
 
-  const userId =user._id  // userId from post
+  const PostUserId =user._id  // userId from post
 
   function getPostComments(){
     return axios.get(`https://route-posts.routemisr.com/posts/${id}/comments`,{
@@ -42,13 +43,14 @@ export default function PostCard({post, isPostDetails = false}) {
 
   if (!body && !image) return;
 
+
   function deleteMyPost(){
    return axios.delete(`https://route-posts.routemisr.com/posts/${id}`, {
       headers: {Authorization: `Bearer ${localStorage.getItem("userToken")}`},
     });
   }
 
-  const query = useQueryClient()
+  // const query = useQueryClient()
 
   const {isPending, mutate} = useMutation({
   mutationFn: deleteMyPost,
@@ -62,6 +64,9 @@ export default function PostCard({post, isPostDetails = false}) {
   },
   onSettled: () => {},
   });
+
+
+
 
   return (
     <Card className="max-w-125 mx-auto mb-5">
@@ -81,7 +86,7 @@ export default function PostCard({post, isPostDetails = false}) {
         </div>
         </div>
         
-       {loggedUserId === userId && (<Dropdown>
+       {loggedUser && loggedUser?._id === PostUserId && (<Dropdown>
       <DropdownTrigger>
         <Button isIconOnly variant="light">
 <HiOutlineDotsHorizontal className="cursor-pointer" />
