@@ -14,6 +14,9 @@ const imageInput= useRef();
 // const queryClient = useQueryClient();
 const [preview, setPreview] = useState(null);
 const [photoUrl, setPhotoUrl] = useState(null);
+const [currentPassword, setCurrentPassword] = useState("");
+const [newPassword, setNewPassword] = useState("");
+const [reNewPassword, setReNewPassword] = useState("");
 
 
 
@@ -46,7 +49,7 @@ function updateName() {
     {
       name:newName,
       email: userId.email,
-      password: "123456"
+      password: currentPassword
     },
     {   
       headers: {
@@ -95,6 +98,69 @@ const { mutate: updateUserName, isPending: isNamePending } = useMutation({
   },
 });
 
+////////////////////////////////////
+
+
+const {mutate: changePass, isPending: isPassPending} = useMutation({
+  mutationFn:changePassword,
+  onSuccess: () => {
+    toast.success("Password Changed♻️");
+    setCurrentPassword("");
+    setNewPassword("");
+    setNewPassword("");
+  },
+  onError: () => {
+    toast.error("Failed to change this password💢");
+  },
+});
+
+
+
+
+// mutation 
+// const { mutate: changePass, isPending: isPassPending } = useMutation({
+//   mutationFn: changePassword,
+//   onSuccess: () => {
+//     toast.success("Password changed ✅");
+//     setCurrentPassword("");
+//     setNewPassword("");
+//     setReNewPassword("");
+//   },
+//   onError: () => {
+//     toast.error("Failed to change password ❌");
+//   },
+// });
+
+
+
+function changePassword() {
+  return axios.patch("https://route-posts.routemisr.com/users/change-password",
+    {password:currentPassword,
+      newPassword: newPassword
+    },
+    {headers: {Authorization: `Bearer ${localStorage.getItem("userToken")}`}}
+  );
+}
+
+
+
+// function changePassword() {
+//   return axios.patch("https://route-posts.routemisr.com/users/change-password",
+//     { 
+//       password: currentPassword,
+//       newPassword: newPassword
+//     },
+//     { headers: { Authorization: `Bearer ${localStorage.getItem("userToken")}` } }
+//   );
+// }
+
+//////////////////////////////////////
+
+
+
+
+
+
 function handleImageChange(e) {
 const file = e.target.files[0];
 if (!file) return;
@@ -126,7 +192,7 @@ mutate(formData);
 
       {isPending && <p>Uploading...</p>}
 
-      /**/ */
+    
 
       <div className="flex flex-col gap-2 mt-4 w-64">
   <input
@@ -146,11 +212,65 @@ mutate(formData);
 
   {isNamePending && <p>Updating...</p>}
 </div>
-    </div>
+
+
+<div className='flex flex-col p-4 gap-2 border rounded-xl'>
+  <h3 className='text-lg font-bold'>Change Password</h3>
+  <input type="password" className='p-2 rounded border' value={currentPassword} 
+   onChange={(e) => setCurrentPassword(e.target.value)} placeholder='Current Password'/>
+   <input type="password" className='p-2 rounded border' value={newPassword} 
+   onChange={(e) => setNewPassword(e.target.value)} placeholder='New Password'/>
+   <input type="password" className='p-2 rounded border' value={reNewPassword} 
+   onChange={(e) => setReNewPassword(e.target.value)} placeholder='Confirm new Password'/>
+   
+   <button  onClick={() => changePass()} disabled= {isPending || !currentPassword || !newPassword || !reNewPassword}
+   className='bg-green-400 text-white p-2 disabled:bg-gray-400 rounded-xl'>
+   {isPassPending ? "Changing♻️" : "Change Password"}</button>
+</div>
+ </div>
     </>
     
   );
 }
+
+
+
+
+
+
+
+{/* */}
+
+{/* <div className='flex flex-col gap-2 border p-4 rounded-xl'>
+  <h3 className='font-bold text-lg'>Change Password</h3>
+  <input
+    type="password"
+    value={currentPassword}
+    onChange={(e) => setCurrentPassword(e.target.value)}
+    placeholder="Current Password"
+    className="border p-2 rounded"/>
+  <input
+    type="password"
+    value={newPassword}
+    onChange={(e) => setNewPassword(e.target.value)}
+    placeholder="New Password"
+    className="border p-2 rounded"/>
+  <input
+    type="password"
+    value={reNewPassword}
+    onChange={(e) => setReNewPassword(e.target.value)}
+    placeholder="Confirm New Password"
+    className="border p-2 rounded"/>
+  <button
+    onClick={() => changePass()}
+    disabled={isPassPending || !currentPassword || !newPassword || !reNewPassword}
+    className="bg-green-500 disabled:bg-gray-400 text-white p-2 rounded">
+    {isPassPending ? "Changing..." : "Change Password"}
+  </button>
+</div> */}
+
+
+   
 
 
 

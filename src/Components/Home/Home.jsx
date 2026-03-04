@@ -20,11 +20,12 @@ function getAllPosts(){
  return axios.get(`https://route-posts.routemisr.com/posts`, {
     //params:
     headers:{
-      // Authorization:`Bearer ${localStorage.getItem("userToken")}`,
-      Authorization:`Bearer ${userLogin}`,
+      Authorization:`Bearer ${localStorage.getItem("userToken")}`,
+      // Authorization:`Bearer ${userLogin}`,
     },
   })
 }
+console.log(localStorage.getItem("userToken"))
 // console.log("userLogin:", userLogin);
 const {data, isLoading, isError, isFetching, error} = useQuery({
   queryKey: ["getAllPost", userLogin],
