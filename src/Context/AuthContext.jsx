@@ -79,7 +79,6 @@ useEffect(() => {
       },
     })
     .then((res) => {
-       console.log("API response:", res.data);
       setUserId(res.data.data.user);
       localStorage.setItem("userData", JSON.stringify(res.data.data.user))
     })

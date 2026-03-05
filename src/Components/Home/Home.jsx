@@ -25,7 +25,7 @@ function getAllPosts(){
     },
   })
 }
-console.log(localStorage.getItem("userToken"))
+
 // console.log("userLogin:", userLogin);
 const {data, isLoading, isError, isFetching, error} = useQuery({
   queryKey: ["getAllPost", userLogin],
