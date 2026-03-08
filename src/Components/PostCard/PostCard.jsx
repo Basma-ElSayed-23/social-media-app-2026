@@ -15,7 +15,7 @@ import { useNavigate } from "react-router-dom";
 const PLACEHOLDER_IMAGE = "https://avatars.githubusercontent.com/u/86160567?s=200&v=4"
 
 export default function PostCard({post, isPostDetails = false}) {
-  const {body, image, createdAt, user, topComment, id}  = post;
+  const {body, image, createdAt, user, topComment, _id: postId}  = post;
   const {name, photo} = user;
   const query = useQueryClient();
 
@@ -28,14 +28,14 @@ export default function PostCard({post, isPostDetails = false}) {
   const PostUserId =user._id  // userId from post
 
   function getPostComments(){
-    return axios.get(`https://route-posts.routemisr.com/posts/${id}/comments`,{
+    return axios.get(`https://route-posts.routemisr.com/posts/${postId}/comments`,{
       headers: {Authorization: `Bearer ${localStorage.getItem("userToken")}`},
       // params :{limit: 10}
     });
   }
 
   const {data, isLoading, isError, error} = useQuery({
-    queryKey: ["getPostComments", id],
+    queryKey: ["getPostComments", postId],
     queryFn: getPostComments,
     enabled: isPostDetails
   });
@@ -45,7 +45,7 @@ export default function PostCard({post, isPostDetails = false}) {
 
 
   function deleteMyPost(){
-   return axios.delete(`https://route-posts.routemisr.com/posts/${id}`, {
+   return axios.delete(`https://route-posts.routemisr.com/posts/${postId}`, {
       headers: {Authorization: `Bearer ${localStorage.getItem("userToken")}`},
     });
   }
@@ -94,7 +94,7 @@ export default function PostCard({post, isPostDetails = false}) {
       </DropdownTrigger>
       <DropdownMenu aria-label="Static Actions">
        
-          <DropdownItem key="edit" textValue="Edit Post" onPress={() => navigate(`/editPost/${id}`)}>
+          <DropdownItem key="edit" textValue="Edit Post" onPress={() => navigate(`/editPost/${postId}`)}>
              <div className="flex items-center justify-between">
               Edit Post <FaRegEdit />
           </div>
@@ -119,14 +119,26 @@ export default function PostCard({post, isPostDetails = false}) {
       <CardFooter>
        <div className="w-full flex justify-between">
         <div className="cursor-pointer">👍Like</div>
-        <div className="cursor-pointer"><Link to={`/postDetails/${id}`}>🗨️Comment</Link></div>
+        <div className="cursor-pointer"><Link to={`/postDetails/${postId}`}>🗨️Comment</Link></div>
         <div className="cursor-pointer">🔄️Share</div>
        </div>
       </CardFooter>
-     <CommentCreation postId = {post._id} queryKey={isPostDetails ? ["getPostComments"] : ["getAllPost"] }/>
+     <CommentCreation postId = {postId} queryKey={isPostDetails ? ["getPostComments"] : ["getAllPost"] }/>
      {/* <div>comment</div> */}
-      {isPostDetails === false && myTopComment && (<Comment comment={myTopComment} />)}
-    {isPostDetails && data?.data.data.comments.map((currentComment) =>(<Comment key={currentComment._id} comment={currentComment} />))}
+      {/* {isPostDetails === false && myTopComment && (<Comment comment={myTopComment} />)} */}
+
+    {isPostDetails === false && myTopComment && (
+      <Comment
+       comment={myTopComment}
+       post={post}
+       queryKey={"getAllPost"} />)}
+
+    {/* {isPostDetails && data?.data.data.comments.map((currentComment) =>(<Comment key={currentComment._id} comment={currentComment} />))} */}
+    {isPostDetails && data?.data.data.comments?.map((currentComment) =>(
+      <Comment key={currentComment._id} 
+      comment={currentComment}
+      post={post}
+      queryKey={["getPostComments"]} />))}
     </Card>
   );
 }

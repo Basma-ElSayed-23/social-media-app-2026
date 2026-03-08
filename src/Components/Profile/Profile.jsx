@@ -181,7 +181,7 @@ const coverSrc = "https://images.unsplash.com/photo-1614850523459-c2f4c699c52e?w
 
 
 const { data: bookmarksData, isLoading: bookmarkLoading } = useQuery({
-  queryKey: ["bookmarks"], //**/https://route-posts.routemisr.com/users/bookmarks */
+  queryKey: ["bookmarks"], 
   queryFn: () => axios.get("https://route-posts.routemisr.com/posts//bookmark", {
     headers: {Authorization: `Bearer ${localStorage.getItem("userToken")}`},
   }),
