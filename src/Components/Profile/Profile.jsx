@@ -178,224 +178,114 @@ const avatarSrc = preview || userId?.photo || "https://avatars.githubusercontent
 const coverSrc = "https://images.unsplash.com/photo-1614850523459-c2f4c699c52e?w=1200&q=80";
 
 
+
+
+const { data: bookmarksData, isLoading: bookmarkLoading } = useQuery({
+  queryKey: ["bookmarks"], //**/https://route-posts.routemisr.com/users/bookmarks */
+  queryFn: () => axios.get("https://route-posts.routemisr.com/posts//bookmark", {
+    headers: {Authorization: `Bearer ${localStorage.getItem("userToken")}`},
+  }),
+});
+
+const bookmarks = bookmarksData?.data?.data?.bookmarks ?? [];
+const savedCount = bookmarks.length;
+
 return (
   <>
-    <Helmet>
-      <title>Profile – {userId?.name || "User"}</title>
-    </Helmet>
+  <Helmet>
+    <title>{userId?.name || "Profile"}</title>
+  </Helmet>
 
-  
-    <div className="min-h-screen bg-[#f4f6fb] font-poppins antialiased">
-      {/* Cover */}
-      <div className="relative w-full h-60 bg-gray-300 overflow-hidden rounded-b-2xl">
-        <img 
-          src={coverSrc} 
-          alt="cover" 
-          className="w-full h-full object-cover"
-        />
-        <div className="absolute inset-0 bg-linear-to-b from-transparent via-transparent to-black/50" />
+  <div className='min-h-screen bg-[#f4f6fb] rounded-xl'>
+    <div className='h-64 bg-linear-to-r from-[#333d5a] via-[#3b4865] to-[#5d799b]'></div> 
+
+    <div className='max-w-6xl mx-auto rounded-md px-5 -mt-32'>
+      <div className='bg-white shadow-md p-8 -mb-2 rounded-3xl'>
+        <div className='grid grid-cols-12 gap-6 items-start'>
+          <div className='col-span-4 flex items-center gap-4'>
+            <div className='w-32 h-32 rounded-full overflow-hidden border-4 border-white shadow cursor-pointer'
+            onClick={() => imageInput.current.click()}>
+              <img src={preview || userId?.photo} className='w-full h-full object-cover' />
+            </div>
+            <input type="file" ref={imageInput} className='hidden' onChange={handleImageChange}/> 
+          
+          <div className='col-span-2'>
+            <h2 className='text-2xl font-bold text-gray-800'>
+              {userId?.name || "basma23"}
+            </h2>
+            <p className='text-gray-500 text-sm'>@{userId?.username || "basma24"}</p>
+        </div>
+       </div>
+      <div className='col-span-2 bg-gray-50 border rounded-xl p-4 text-center'>
+        <p className='text-xs uppercase text-gray-500'>Followers</p>
+        <p className='text-2xl font-bold'>{userId?.followersCount || 0}</p>
       </div>
-
-      <div className="max-w-6xl mx-auto px-4 sm:px-6 lg:px-8 py-6">
-        <div className="flex flex-col md:flex-row gap-6 items-start">
-          <div className="flex-1 min-w-0">
-
-            {/* Avatar + User Info Row */}
-            <div className="flex items-end gap-4 px-5 -mt-16 relative z-10">
-              <div 
-                className="relative w-24 h-24 sm:w-28 sm:h-28 rounded-full border-4 border-white overflow-hidden shadow-lg cursor-pointer transition-transform hover:scale-105"
-                onClick={() => imageInput.current.click()}
-              >
-                <img 
-                  src={avatarSrc} 
-                  alt="avatar" 
-                  className="w-full h-full object-cover"
-                />
-                <div className="absolute inset-0 bg-black/35 flex items-center justify-center opacity-0 hover:opacity-100 transition-opacity">
-                  <span className="text-white text-2xl">📷</span>
-                </div>
-              </div>
-
-              <input 
-                type="file" 
-                ref={imageInput} 
-                className="hidden"
-                onChange={handleImageChange} 
-                accept="image/*" 
-              />
-
-              <div className="pb-2">
-                <h2 className="text-xl sm:text-2xl font-bold text-[#1a1a2e] m-0">
-                  {userId?.name || "Your Name"}
-                </h2>
-                <p className="text-sm text-gray-600 mt-1">
-                  {userId?.email || "email@example.com"}
-                </p>
-              </div>
-            </div>
-
-            {isPending && (
-              <p className="px-5 py-1.5 text-sm text-gray-600">
-                Uploading photo...
-              </p>
-            )}
-
-            {/* Stats */}
-            <div className="flex border-b border-gray-200 mt-4">
-              <div className="text-center px-6 py-2">
-                <div className="text-lg font-bold text-[#1a1a2e]">{postCount}</div>
-                <div className="text-xs text-gray-500 font-medium">Posts</div>
-              </div>
-              {/* لو عندك إحصائيات تانية → ضيفها هنا بنفس الطريقة */}
-            </div>
-
-            {/* Tabs */}
-            <div className="flex gap-1.5 border-b-2 border-gray-200 mt-3 px-4">
-              <button
-                className={`px-4 sm:px-5 py-2.5 text-sm font-semibold rounded-t-lg transition-colors ${
-                  activeTab === "posts"
-                    ? "text-[#4361ee] bg-blue-50/80"
-                    : "text-gray-600 hover:text-gray-900"
-                }`}
-                onClick={() => setActiveTab("posts")}
-              >
-                🖼️ My Posts
-              </button>
-
-              <button
-                className={`px-4 sm:px-5 py-2.5 text-sm font-semibold rounded-t-lg transition-colors ${
-                  activeTab === "edit"
-                    ? "text-[#4361ee] bg-blue-50/80"
-                    : "text-gray-600 hover:text-gray-900"
-                }`}
-                onClick={() => setActiveTab("edit")}
-              >
-                ✏️ Edit Profile
-              </button>
-
-              <button
-                className={`px-4 sm:px-5 py-2.5 text-sm font-semibold rounded-t-lg transition-colors ${
-                  activeTab === "password"
-                    ? "text-[#4361ee] bg-blue-50/80"
-                    : "text-gray-600 hover:text-gray-900"
-                }`}
-                onClick={() => setActiveTab("password")}
-              >
-                🔒 Password
-              </button>
-            </div>
-
-            {/* Content */}
-            <div className="p-5">
-              {activeTab === "posts" && (
-                <div>
-                  {myPosts.length === 0 ? (
-                    <p className="text-center text-gray-400 text-sm py-8">
-                      No posts yet
-                    </p>
-                  ) : (
-                    myPosts.map((post) => (
-                      <PostCard key={post._id} post={post} isPostDetails={false} />
-                    ))
-                  )}
-                </div>
-              )}
-
-              {activeTab === "edit" && (
-                <div className="bg-white rounded-xl p-5 shadow-sm border border-gray-100">
-                  <h3 className="text-base font-bold text-[#1a1a2e] mb-4 flex items-center gap-2">
-                    ✏️ Update Name
-                  </h3>
-                  <div className="space-y-3">
-                    <input
-                      className="w-full px-3.5 py-2.5 text-sm border border-gray-200 rounded-lg bg-gray-50/60 focus:bg-white focus:border-[#4361ee] focus:ring-3 focus:ring-[#4361ee]/20 outline-none transition-all"
-                      type="text"
-                      value={newName}
-                      onChange={(e) => setNewName(e.target.value)}
-                      placeholder="Enter new name"
-                    />
-                    <input
-                      className="w-full px-3.5 py-2.5 text-sm border border-gray-200 rounded-lg bg-gray-50/60 focus:bg-white focus:border-[#4361ee] focus:ring-3 focus:ring-[#4361ee]/20 outline-none transition-all"
-                      type="password"
-                      value={currentPassword}
-                      onChange={(e) => setCurrentPassword(e.target.value)}
-                      placeholder="Current Password (required)"
-                    />
-                    <button
-                      className="w-full bg-gradient-to-r from-[#4361ee] to-[#7209b7] text-white font-semibold text-sm py-2.5 px-5 rounded-lg hover:opacity-90 hover:-translate-y-0.5 transition-all disabled:opacity-60 disabled:cursor-not-allowed disabled:hover:opacity-60 disabled:hover:translate-y-0 flex items-center justify-center gap-2"
-                      onClick={updateUserName}
-                      disabled={isNamePending || !newName || !currentPassword}
-                    >
-                      {isNamePending ? (
-                        <>
-                          <span className="inline-block w-3.5 h-3.5 border-2 border-white/40 border-t-white rounded-full animate-spin" />
-                          Updating...
-                        </>
-                      ) : (
-                        "Save Name"
-                      )}
-                    </button>
-                  </div>
-                </div>
-              )}
-
-              {activeTab === "password" && (
-                <div className="bg-white rounded-xl p-5 shadow-sm border border-gray-100">
-                  <h3 className="text-base font-bold text-[#1a1a2e] mb-4 flex items-center gap-2">
-                    🔒 Change Password
-                  </h3>
-                  <div className="space-y-3">
-                    <input
-                      className="w-full px-3.5 py-2.5 text-sm border border-gray-200 rounded-lg bg-gray-50/60 focus:bg-white focus:border-[#06d6a0] focus:ring-3 focus:ring-[#06d6a0]/20 outline-none transition-all"
-                      type="password"
-                      value={currentPassword}
-                      onChange={(e) => setCurrentPassword(e.target.value)}
-                      placeholder="Current Password"
-                    />
-                    <input
-                      className="w-full px-3.5 py-2.5 text-sm border border-gray-200 rounded-lg bg-gray-50/60 focus:bg-white focus:border-[#06d6a0] focus:ring-3 focus:ring-[#06d6a0]/20 outline-none transition-all"
-                      type="password"
-                      value={newPassword}
-                      onChange={(e) => setNewPassword(e.target.value)}
-                      placeholder="New Password"
-                    />
-                    <input
-                      className="w-full px-3.5 py-2.5 text-sm border border-gray-200 rounded-lg bg-gray-50/60 focus:bg-white focus:border-[#06d6a0] focus:ring-3 focus:ring-[#06d6a0]/20 outline-none transition-all"
-                      type="password"
-                      value={reNewPassword}
-                      onChange={(e) => setReNewPassword(e.target.value)}
-                      placeholder="Confirm New Password"
-                    />
-
-                    {newPassword && reNewPassword && newPassword !== reNewPassword && (
-                      <p className="text-red-500 text-xs mt-1">⚠️ Passwords don't match</p>
-                    )}
-
-                    <button
-                      className="w-full bg-gradient-to-r from-[#06d6a0] to-[#1b9aaa] text-white font-semibold text-sm py-2.5 px-5 rounded-lg hover:opacity-90 hover:-translate-y-0.5 transition-all disabled:opacity-60 disabled:cursor-not-allowed disabled:hover:opacity-60 disabled:hover:translate-y-0 flex items-center justify-center gap-2"
-                      onClick={changePass}
-                      disabled={isPassPending || !currentPassword || !newPassword || !reNewPassword || newPassword !== reNewPassword}
-                    >
-                      {isPassPending ? (
-                        <>
-                          <span className="inline-block w-3.5 h-3.5 border-2 border-white/40 border-t-white rounded-full animate-spin" />
-                          Changing...
-                        </>
-                      ) : (
-                        "Change Password"
-                      )}
-                    </button>
-                  </div>
-                </div>
-              )}
-            </div>
-          </div>
+      <div className='col-span-2 bg-gray-50 border rounded-xl p-4 text-center'>
+        <p className='text-xs text-gray-500 uppercase'>Following</p> 
+        <p className='text-2xl font-bold'>{userId?.followersCount || 2}</p>
+      </div>
+      <div className='col-span-2 bg-gray-50 rounded-xl p-4 text-center border'>
+        <p className='text-xs text-gray-500 uppercase'>Bookmarks</p>
+        <p className='text-2xl font-bold'>{savedCount}</p>
+      </div>
+      <div className='col-span-8 bg-indigo-50 border-1 border-gray-300 rounded-xl p-16'>
+        <h3 className='font-semibold '>About</h3>
+        <p className='text-sm text-gray-600 mb-2'>✉️{userId?.email}</p>
+        {/* <p className='text-sm text-gray-600'>Active on Route Posts</p> */}
+      </div>
+      <div className='col-span-4 grid gap-4'>
+        <div className='bg-blue-50 border rounded-xl p-4'>
+          <p className='text-xs text-gray-500 uppercase'>MY POSTS</p>
+          <p className='text-2xl font-bold mt-2'>{postCount}</p>
+        </div>
+        <div className='bg-blue-50 border rounded-xl p-4'>
+          <p className='text-xs text-gray-500 uppercase'>SAVED POSTS</p>
+          <p className='text-2xl font-bold mt-2'>{savedCount}</p>
+        </div>
         </div>
       </div>
     </div>
+  </div>
+  </div>
+  <div className='max-w-6xl mx-auto px-6 mt-8'>
+    <div className='bg-white flex gap-3 items-center rounded-xl shadow-sm p-3'>
+      <button onClick={() => setActiveTab("posts")} className={`px-4 py-2 rounded-lg text-sm font-medium flex items-center gap-2 
+        ${activeTab === "posts" ? "bg-blue-100 text-blue-600" : "text-gray-600 hover:bg-gray-100"}`}>📄My Posts</button>
+      <button onClick={() => setActiveTab("saved")} className={`px-4 py-2 rounded-lg text-sm font-medium flex items-center gap-2 
+        ${activeTab === "saved" ? "bg-blue-100 text-blue-600" : "text-gray-600 hover:bg-gray-100"}`}>📩Saved</button>
+        <div className='rounded-full px-3 py-1 ml-auto bg-blue-100 text-sm'>{postCount}</div>
+    </div>
+    <div className='mt-6 space-y-6'>{activeTab === "posts" && (
+      <>
+      {myPosts.length === 0 ? (
+        <p className='text-center text-gray-500 py-10'>No posts yet</p>
+      ) : (
+        myPosts.map((post) => (
+          <PostCard key={post._id} post={post} isPostDetails={false}/>
+        ))
+      )}
+      </>
+    )}
+    {activeTab === "saved" && (
+      <>
+      {bookmarkLoading ? (
+        <p className='text-center py-10'>Loading...</p>
+      ) : bookmarks.length === 0 ? (
+        <p className='text-center text-gray-500 py-10'>No saved posts yet.</p>
+      ) : (
+        bookmarks.map((post) => (
+          <PostCard key={post._id} post={post} isPostDetails={false}/>
+        ))
+      )}
+      </> 
+    )}
+    </div>
+  </div>
   </>
-);
+)
 }
+
+
 
 
 
