@@ -17,9 +17,9 @@ const [activeTab, setActiveTab] = useState("posts");
 // const queryClient = useQueryClient();
 const [preview, setPreview] = useState(null);
 const [photoUrl, setPhotoUrl] = useState(null);
-const [currentPassword, setCurrentPassword] = useState("");
-const [newPassword, setNewPassword] = useState("");
-const [reNewPassword, setReNewPassword] = useState("");
+// const [currentPassword, setCurrentPassword] = useState("");
+// const [newPassword, setNewPassword] = useState("");
+// const [reNewPassword, setReNewPassword] = useState("");
 
 
 

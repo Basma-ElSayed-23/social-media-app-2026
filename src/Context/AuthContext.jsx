@@ -29,48 +29,6 @@ const updateUserData = (updatedUser) => {
    },  []);
 
 
-//    useEffect(() => {
-//     if (localStorage.getItem("userToken")) {
-//         const {user} = jwtDecode(localStorage.getItem("userToken"));
-//    setuserId(user)
-// }
-//    }, [userLogin])
-
-
-// useEffect(() => {
-//   if (userLogin && !localStorage.getItem("userData")){
-//     axios.get(`https://route-posts.routemisr.com/users/profile-data`, {
-//       headers: {
-//         Authorization: `Bearer ${userLogin}`,
-//       },
-//     })
-//     .then((res) => {
-//       setUserId(res.data.data.user);
-//       localStorage.setItem("userData", JSON.stringify(res.data.data.user))
-//     })
-//     .catch((err) => {
-//     console.log(err);
-//     });
-//   }
-// },[userLogin]);
-
-
-// useEffect(() => {
-//   if (userLogin) {
-//     axios.get(`https://route-posts.routemisr.com/users/profile-data`, {
-//       headers: {
-//         Authorization: `Bearer ${userLogin}`,
-//       },
-//     })
-//     .then((res) => {
-//       setUserId(res.data.data.user);
-//       localStorage.setItem("userData", JSON.stringify(res.data.data.user))
-//     })
-//   }
-// }, [userLogin]);
-
-
-
 useEffect(() => {
   if (userLogin) {
     axios.get(`https://route-posts.routemisr.com/users/profile-data`, {

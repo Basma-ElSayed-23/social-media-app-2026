@@ -93,10 +93,10 @@ export default function MyNavbar() {
           </DropdownTrigger>
           <DropdownMenu aria-label="Profile Actions" variant="flat">
             
-            <DropdownItem key="settings"><Link className="w-full block" to="/profile">Profile</Link></DropdownItem>
-            <DropdownItem key="logout" color="danger" onClick={() => logOut()}>
-              Log Out
-            </DropdownItem>
+            <DropdownItem key="profile"><Link className="w-full block" to="/profile">Profile</Link></DropdownItem>
+            <DropdownItem key="settings"><Link className="w-full block" to="/settings">Settings</Link></DropdownItem>
+            <DropdownItem key="logout" color="danger" onClick={() => logOut()}>Log Out</DropdownItem>
+
           </DropdownMenu>
         </Dropdown>
       </NavbarContent>

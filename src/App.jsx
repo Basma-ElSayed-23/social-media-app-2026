@@ -16,6 +16,7 @@ import { ToastContainer } from 'react-toastify';
 import DetectOffline from './Components/DetectOffline/DetectOffline';
 import { useNetworkState } from 'react-use';
 import EditPost from './Components/EditPost/EditPost';
+import Settings from "./Components/Settings/Settings"
 
 
 
@@ -28,6 +29,7 @@ const router= createBrowserRouter([
 { path: "editPost/:id", element: <ProtectedRoute><EditPost/></ProtectedRoute>},
 { path: "login", element: <Login/>},
 { path: "profile", element: <ProtectedRoute><Profile/></ProtectedRoute>},
+{ path: "settings", element: <ProtectedRoute><Settings/></ProtectedRoute>},
 { path: "register", element: <Register/>},
 { path: "*", element: <Notfound/>},
 
