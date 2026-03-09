@@ -1,7 +1,6 @@
 import { createContext, useEffect, useState } from "react";
 import axios from "axios";
-import {jwtDecode} from "jwt-decode"
-
+// import {jwtDecode} from "jwt-decode"
 
 export const AuthContext =  createContext();
 
@@ -14,24 +13,21 @@ export default function AuthContextProvider({children}) {
    return data && data !== "undefined" ? JSON.parse(data) : null;
    })
 
-// const[profilePicRefresh, setprofilePicRefresh] = useState(0)
 
-  //**// */
 const updateUserData = (updatedUser) => {
   setUserId(updatedUser);
   localStorage.setItem("userData", JSON.stringify(updatedUser));
 };
 
-   useEffect(() =>{
-    if (localStorage.getItem("userToken")){
-        setUserLogin(localStorage.getItem("userToken"))
-}
-   },  []);
-
-
 useEffect(() => {
+  if (localStorage.getItem("userToken")) {
+    setUserLogin(localStorage.getItem("userToken"))
+  }
+}, []);
+
+useEffect (() => {
   if (userLogin) {
-    axios.get(`https://route-posts.routemisr.com/users/profile-data`, {
+    axios.get(`https://route-posts.routemisr.com/users/profile-data`,{
       headers: {
         Authorization: `Bearer ${userLogin}`,
       },
@@ -43,9 +39,7 @@ useEffect(() => {
   }
 }, [userLogin]);
 
-
-
-    return  <AuthContext.Provider  value={{userLogin, setUserLogin, userId, updateUserData}}>
-        {children}
-    </AuthContext.Provider>
+return <AuthContext.Provider value={{userLogin, setUserLogin, userId, updateUserData}}>
+  {children}
+</AuthContext.Provider>
 }

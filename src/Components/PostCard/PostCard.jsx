@@ -69,7 +69,7 @@ export default function PostCard({post, isPostDetails = false}) {
 
 
   return (
-    <Card className="max-w-125 mx-auto mb-5">
+    <Card className="w-125 mx-auto mb-5">
       <CardHeader className="flex justify-between gap-3">
         <div className="flex gap-3">
       <img
@@ -113,7 +113,7 @@ export default function PostCard({post, isPostDetails = false}) {
       <Divider />
       <CardBody>
        {body && <p className="mb-2">{body}</p>}
-       {image && <img src={image} alt={body}/>}
+        {image && <img src={image} alt={body}/>}
       </CardBody>
       <Divider />
       <CardFooter>

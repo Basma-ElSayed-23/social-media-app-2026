@@ -196,7 +196,7 @@ return (
     <title>{userId?.name || "Profile"}</title>
   </Helmet>
 
-  <div className='min-h-screen bg-[#f4f6fb] rounded-xl'>
+  <div className='bg-[#f4f6fb] rounded-xl'>
     <div className='h-64 bg-linear-to-r from-[#333d5a] via-[#3b4865] to-[#5d799b]'></div> 
 
     <div className='max-w-6xl mx-auto rounded-md px-5 -mt-32'>
